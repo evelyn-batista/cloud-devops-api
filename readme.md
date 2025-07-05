@@ -1,77 +1,108 @@
-# Imersão DevOps - Alura Google Cloud
+# API de Gestão Escolar
 
-Este projeto é uma API desenvolvida com FastAPI para gerenciar alunos, cursos e matrículas em uma instituição de ensino.
+Uma API RESTful desenvolvida com FastAPI para gerenciar alunos, cursos e matrículas de uma instituição de ensino. O projeto demonstra práticas modernas de desenvolvimento de API em Python, incluindo o uso de ORM para interação com o banco de dados, validação de dados com Pydantic e containerização com Docker.
+
+## ✨ Principais Funcionalidades
+
+-   **Gestão de Alunos:**
+    -   CRUD completo (Criar, Ler, Atualizar, Deletar) para alunos.
+    -   Busca de alunos por ID, nome (parcial) e e-mail.
+-   **Gestão de Cursos:**
+    -   Operações de Criar, Ler e Atualizar para cursos.
+    -   Busca de cursos por código único.
+-   **Gestão de Matrículas:**
+    -   Matricular um aluno em um curso.
+    -   Listar todos os cursos em que um aluno está matriculado.
+    -   Listar todos os alunos matriculados em um determinado curso.
+
+## 🛠️ Tecnologias Utilizadas
+
+-   **Backend:** Python
+-   **Framework:** FastAPI
+-   **Banco de Dados:** SQLite
+-   **ORM:** SQLAlchemy
+-   **Validação de Dados:** Pydantic
+-   **Servidor ASGI:** Uvicorn
+-   **Containerização:** Docker
+
+## 🚀 Como Executar o Projeto
+
+Siga os passos abaixo para configurar e executar o projeto em seu ambiente local.
 
 ## Pré-requisitos
 
-- [Python 3.10 ou superior instalado](https://www.python.org/downloads/)
+- [Python 3.10+](https://www.python.org/downloads/)
 - [Git](https://git-scm.com/downloads)
-- [Docker](https://www.docker.com/get-started/)
+- [Docker](https://www.docker.com/get-started/) 
 
-## Passos para subir o projeto
+### Instalação
 
-1. **Faça o download do repositório:**
-   [Clique aqui para realizar o download](https://github.com/guilhermeonrails/imersao-devops/archive/refs/heads/main.zip)
+1.  **Clone o repositório:**
+    ```sh
+    git clone https://github.com/evelyn-batista/cloud-devops-api
+    cd <NOME_DO_DIRETORIO>
+    ```
 
-2. **Crie um ambiente virtual:**
-   ```sh
-   python3 -m venv ./venv
-   ```
+2.  **Crie e ative um ambiente virtual:**
+    ```sh
+    # Criar o ambiente
+    python -m venv venv
 
-3. **Ative o ambiente virtual:**
-   - No Linux/Mac:
-     ```sh
-     source venv/bin/activate
-     ```
-   - No Windows, abra um terminal no modo administrador e execute o comando:
-   ```sh
-   Set-ExecutionPolicy RemoteSigned
-   ```
+    # Ativar no Windows
+    .\venv\Scripts\activate
 
-     ```sh
-     venv\Scripts\activate
-     ```
+    # Ativar no Linux/macOS
+    source venv/bin/activate
+    ```
 
-4. **Instale as dependências:**
-   ```sh
-   pip install -r requirements.txt
-   ```
+3.  **Instale as dependências:**
+    ```sh
+    pip install -r requirements.txt
+    ```
 
-5. **Execute a aplicação:**
-   ```sh
-   uvicorn app:app --reload
-   ```
+4.  **Execute a aplicação:**
+    ```sh
+    uvicorn app:app --reload
+    ```
+    O banco de dados `escola.db` será criado automaticamente no primeiro uso.
 
-6. **Acesse a documentação interativa:**
+## 📄 Documentação da API
 
-   Abra o navegador e acesse:  
-   [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+Com a aplicação em execução, acesse a documentação interativa (gerada pelo Swagger UI) no seu navegador:
 
-   Aqui você pode testar todos os endpoints da API de forma interativa.
+----
+http://127.0.0.1:8000/docs
 
----
+Lá você poderá visualizar todos os endpoints, seus parâmetros e testá-los diretamente.
 
-## Autenticando no Google Cloud
+----
+## 🐳 Executando com Docker
 
-```sh
-gcloud auth login
-gcloud config set project PROJECT_ID
-gcloud run deploy --port=8000
-```
+----
+O projeto está configurado para ser executado em um contêiner Docker, garantindo um ambiente isolado e consistente.
 
+1.  **Construa a imagem Docker:**  
+    ```sh
+    docker build -t gestao-escolar-api .
+    ```
 
-## Estrutura do Projeto
+2.  **Execute o contêiner:**  
+    ```sh
+    docker run -p 8000:8000 gestao-escolar-api
+    ```
+    A API estará disponível em `http://127.0.0.1:8000`.
 
-- `app.py`: Arquivo principal da aplicação FastAPI.
-- `models.py`: Modelos do banco de dados (SQLAlchemy).
-- `schemas.py`: Schemas de validação (Pydantic).
-- `database.py`: Configuração do banco de dados SQLite.
-- `routers/`: Diretório com os arquivos de rotas (alunos, cursos, matrículas).
-- `requirements.txt`: Lista de dependências do projeto.
+### Persistindo os Dados com Volumes
 
----
+Para garantir que os dados do banco de dados SQLite (`escola.db`) não sejam perdidos ao remover o contêiner, você pode mapear um volume do seu host para o contêiner.
 
-- O banco de dados SQLite será criado automaticamente como `escola.db` na primeira execução.
-- Para reiniciar o banco, basta apagar o arquivo `escola.db` (isso apagará todos os dados).
+-   **Linux/macOS:**
+    ```sh
+    docker run -p 8000:8000 -v "$(pwd)":/app gestao-escolar-api
+    ```
+-   **Windows (CMD):**
+    ```sh
+    docker run -p 8000:8000 -v "%cd%":/app gestao-escolar-api
+    ```
+Isso fará com que o arquivo `escola.db` seja salvo no diretório do projeto em sua máquina local.
 
----
